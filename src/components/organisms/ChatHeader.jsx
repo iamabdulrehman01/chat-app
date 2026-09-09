@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { MessageSquare, Volume2, VolumeX, Trash2 } from "lucide-react";
 import { useChatStore } from "@/store/useChatStore";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip } from "@/components/ui/tooltip";
+import { Badge, Tooltip } from "@/components/atoms";
 import { getAvatarInitial } from "@/lib/utils";
 
 export function ChatHeader() {
@@ -130,3 +129,5 @@ export function ChatHeader() {
     </header>
   );
 }
+
+export default ChatHeader;

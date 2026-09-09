@@ -27,3 +27,5 @@ export function TypingIndicator({ feedback }) {
     </div>
   );
 }
+
+export default TypingIndicator;
