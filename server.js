@@ -1,3 +1,6 @@
+// import dotenv from "dotenv";
+// dotenv.config({ path: [".env.local", ".env"] });
+
 import { createServer } from "node:http";
 import net from "node:net";
 import next from "next";

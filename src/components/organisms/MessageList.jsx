@@ -3,8 +3,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowDown, MessageSquareDashed } from "lucide-react";
 import { useChatStore } from "@/store/useChatStore";
-import { MessageBubble } from "./MessageBubble";
-import { TypingIndicator } from "./TypingIndicator";
+import { MessageBubble } from "@/components/molecules";
+import { TypingIndicator } from "@/components/atoms";
 
 export function MessageList() {
   const { messages, feedbackText } = useChatStore();
@@ -78,3 +78,5 @@ export function MessageList() {
     </div>
   );
 }
+
+export default MessageList;
