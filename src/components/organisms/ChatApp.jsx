@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { getSocket } from "@/lib/socket";
 import { useChatStore } from "@/store/useChatStore";
 import { ChatHeader } from "./ChatHeader";
@@ -8,7 +9,10 @@ import { MessageList } from "./MessageList";
 import { ChatInput } from "./ChatInput";
 
 export function ChatApp() {
+  const { user } = useUser();
   const {
+    userName,
+    setUserName,
     addMessage,
     pruneExpiredMessages,
     setClientsTotal,
@@ -18,6 +22,16 @@ export function ChatApp() {
   } = useChatStore();
 
   const audioRef = useRef(null);
+
+  // Sync authenticated user name with chat store if not already customized
+  useEffect(() => {
+    if (user && (userName === "anonymous" || !userName)) {
+      const displayName = user.name || user.nickname || user.email?.split("@")[0];
+      if (displayName) {
+        setUserName(displayName);
+      }
+    }
+  }, [user, userName, setUserName]);
 
   // Background interval: auto-erase messages that reach their 1-hour expiration in real time
   useEffect(() => {
@@ -90,10 +104,12 @@ export function ChatApp() {
   }, [addMessage, setClientsTotal, setFeedbackText, setIsConnected, isSoundEnabled]);
 
   return (
-    <div className="w-full max-w-[760px] h-[100dvh] sm:h-[min(92vh,840px)] bg-white rounded-none sm:rounded-[20px] shadow-none sm:shadow-chat border-0 sm:border sm:border-slate-200/80 flex flex-col overflow-hidden relative transition-all">
+    <div className="w-full h-full flex-1 bg-white rounded-none sm:rounded-2xl shadow-none sm:shadow-chat border-0 sm:border sm:border-slate-200/80 flex flex-col overflow-hidden relative transition-all">
       <ChatHeader />
       <MessageList />
       <ChatInput />
     </div>
   );
 }
+
+export default ChatApp;

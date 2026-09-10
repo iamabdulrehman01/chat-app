@@ -37,11 +37,11 @@ export function MessageBubble({ message }) {
             isOwn ? "text-blue-100 text-right" : "text-blue-600 text-left"
           }`}
         >
-          {isOwn ? "You" : message.name || "anonymous"}
+          {isOwn ? "" : message.name || "anonymous"}
         </div>
         <p className="whitespace-pre-wrap leading-snug">{message.message}</p>
         <div
-          className={`flex items-center gap-1 text-[10px] mt-1 select-none ${
+          className={`flex items-center gap-1 text-[9px] mt-1 select-none ${
             isOwn ? "justify-end text-blue-100/80" : "justify-end text-slate-400"
           }`}
         >
@@ -51,3 +51,5 @@ export function MessageBubble({ message }) {
     </div>
   );
 }
+
+export default MessageBubble;

@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Send, Smile } from "lucide-react";
 import { useChatStore } from "@/store/useChatStore";
 import { getSocket } from "@/lib/socket";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/atoms";
 
 const QUICK_EMOJIS = ["👋", "😊", "🔥", "👍", "❤️", "🎉", "🚀", "✨", "👌", "❌", "✔️", "👎"];
 
@@ -105,7 +105,7 @@ export function ChatInput() {
           className="absolute bottom-full left-4 mb-2 
           flex flex-wrap items-center gap-1
           rounded-2xl border border-slate-200 bg-white p-2
-          shadow-lg animate-messageIn z-30 w-[340px] sm:w-auto "
+          shadow-lg animate-messageIn z-30 w-[340px] sm:w-auto"
         >
           {QUICK_EMOJIS.map((emoji) => (
             <button
@@ -158,3 +158,5 @@ export function ChatInput() {
     </footer>
   );
 }
+
+export default ChatInput;
