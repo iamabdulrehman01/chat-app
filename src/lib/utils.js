@@ -39,3 +39,25 @@ export function formatRelativeTime(isoString) {
     return "";
   }
 }
+
+// Get unique user ID from Auth0 user or fallback to persistent client ID
+export function getUserUniqueId(user) {
+  if (user?.sub) return user.sub;
+  if (user?.userId) return user.userId;
+  if (typeof window !== "undefined") {
+    let localId = localStorage.getItem("chat_unique_user_id");
+    if (!localId) {
+      localId = "usr_" + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem("chat_unique_user_id", localId);
+    }
+    return localId;
+  }
+  return "usr_guest";
+}
+
+// Format ID for compact visual preview
+export function formatShortId(id) {
+  if (!id) return "";
+  if (id.length <= 16) return id;
+  return `${id.substring(0, 8)}...${id.substring(id.length - 4)}`;
+}
