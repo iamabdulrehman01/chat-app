@@ -8,13 +8,11 @@ export const getSocket = () => {
   }
 
   if (!socket) {
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || undefined;
-    socket = io(socketUrl, {
+    socket = io({
       autoConnect: true,
       reconnection: true,
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
-      transports: ["websocket", "polling"],
     });
   }
 
