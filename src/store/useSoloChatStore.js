@@ -20,12 +20,23 @@ export const useSoloChatStore = create(
       showMobileChat: false, // On mobile: true shows conversation, false shows sidebar
 
       setMyUser: ({ userId, userName, userEmail, userPicture }) =>
-        set((state) => ({
-          myUserId: userId || state.myUserId,
-          myUserName: userName || state.myUserName,
-          myUserEmail: userEmail || state.myUserEmail,
-          myUserPicture: userPicture || state.myUserPicture,
-        })),
+        set((state) => {
+          const validCurrentId =
+            state.myUserId && /^\d{4}$/.test(String(state.myUserId))
+              ? state.myUserId
+              : "";
+          const finalUserId =
+            userId && /^\d{4}$/.test(String(userId))
+              ? String(userId)
+              : validCurrentId;
+
+          return {
+            myUserId: finalUserId,
+            myUserName: userName || state.myUserName,
+            myUserEmail: userEmail || state.myUserEmail,
+            myUserPicture: userPicture || state.myUserPicture,
+          };
+        }),
 
       setOnlineUsers: (users) => set({ onlineUsers: users || [] }),
 

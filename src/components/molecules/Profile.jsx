@@ -98,10 +98,13 @@ export function Profile({ compact = false }) {
         <span className="font-semibold text-slate-800 truncate max-w-[110px]">
           {displayName || user.name || "User"}
         </span>
+        <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-100/80 text-blue-700 tracking-wider">
+          #{uniqueId}
+        </span>
         <button
           type="button"
           onClick={handleCopyId}
-          title={`Copy your Unique ID: ${uniqueId}`}
+          title={`Copy your 4-digit Unique ID: ${uniqueId}`}
           className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200/80 text-[10px] font-semibold text-blue-600 transition-colors shrink-0 shadow-2xs active:scale-95"
         >
           {copied ? (
@@ -142,24 +145,24 @@ export function Profile({ compact = false }) {
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] uppercase font-bold tracking-wider text-blue-700 leading-tight">
-                Your Unique ID
+                4-Digit Unique ID
               </span>
               <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-700 font-semibold">
                 Solo Chat
               </span>
             </div>
             <span
-              className="text-[12px] font-mono font-medium text-slate-700 truncate max-w-[160px]"
+              className="text-[15px] font-mono font-bold text-slate-800 tracking-widest"
               title={uniqueId}
             >
-              {formatShortId(uniqueId)}
+              #{uniqueId}
             </span>
           </div>
         </div>
         <button
           type="button"
           onClick={handleCopyId}
-          title="Copy Unique ID to share with friends"
+          title="Copy 4-digit Unique ID to share with friends"
           className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs font-semibold shadow-2xs border border-slate-200 transition-all active:scale-95 shrink-0"
         >
           {copied ? (

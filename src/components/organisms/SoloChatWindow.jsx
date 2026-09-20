@@ -206,13 +206,13 @@ export function SoloChatWindow({ myUserId, myUserName }) {
 
             {/* Partner ID with Copy */}
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="text-[10px] text-slate-400 font-mono truncate max-w-[140px] sm:max-w-[200px]">
-                ID: {formatShortId(activePartnerId)}
+              <span className="text-[10px] text-slate-500 font-mono truncate max-w-[140px] sm:max-w-[200px]">
+                ID: #{formatShortId(activePartnerId)}
               </span>
               <button
                 type="button"
                 onClick={handleCopyPartnerId}
-                title={`Copy partner ID: ${activePartnerId}`}
+                title={`Copy partner 4-digit ID: ${activePartnerId}`}
                 className="flex items-center gap-0.5 text-[10px] font-medium text-blue-600 hover:text-blue-700 transition-colors"
               >
                 {copiedId ? (
