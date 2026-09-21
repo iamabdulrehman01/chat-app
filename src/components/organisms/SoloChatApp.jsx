@@ -153,10 +153,18 @@ export function SoloChatApp({ sessionUser }) {
       setPartnerFeedback(data.fromUserId, data.feedback || "");
     };
 
+    // Confirmation of 4-digit userId from server
+    const onUserConfirmed = (data) => {
+      if (data?.userId) {
+        setMyUser({ userId: data.userId });
+      }
+    };
+
     socket.on("online-users", onOnlineUsers);
     socket.on("solo-message", onSoloMessage);
     socket.on("solo-message-sent", onSoloMessageSent);
     socket.on("solo-feedback", onSoloFeedback);
+    socket.on("registered-user-confirmed", onUserConfirmed);
 
     // Query online users initially
     socket.emit("get-online-users");
@@ -167,6 +175,7 @@ export function SoloChatApp({ sessionUser }) {
       socket.off("solo-message", onSoloMessage);
       socket.off("solo-message-sent", onSoloMessageSent);
       socket.off("solo-feedback", onSoloFeedback);
+      socket.off("registered-user-confirmed", onUserConfirmed);
     };
   }, [
     user,
@@ -175,9 +184,12 @@ export function SoloChatApp({ sessionUser }) {
     addSoloMessage,
     setPartnerFeedback,
     isSoundEnabled,
+    setMyUser,
   ]);
 
-  const currentUserId = myUserId || getUserUniqueId(user);
+  const currentUserId =
+    (user ? getUserUniqueId(user) : null) ||
+    (myUserId && /^\d{4}$/.test(myUserId) ? myUserId : getUserUniqueId(user));
   const currentUserName = myUserName || user?.name || "User";
 
   return (

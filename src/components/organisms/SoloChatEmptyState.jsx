@@ -32,7 +32,7 @@ export function SoloChatEmptyState({ myUserId, myUserName, onSelectUser }) {
         Solo Direct Chat
       </h2>
       <p className="text-xs sm:text-sm text-slate-500 max-w-md mt-1 leading-relaxed">
-        Connect one-on-one with anyone. Share your Unique ID or search for other users to begin a private conversation.
+        Connect one-on-one with anyone. Share your 4-digit ID or search for other users to begin a private conversation.
       </p>
 
       {/* User's Shareable Unique ID Card */}
@@ -42,17 +42,17 @@ export function SoloChatEmptyState({ myUserId, myUserName, onSelectUser }) {
             <div className="flex items-center gap-2">
               <Fingerprint className="w-4 h-4 text-blue-600" />
               <span className="text-[11px] uppercase tracking-wider font-bold text-blue-700">
-                Your Shareable Unique ID
+                Your Shareable 4-Digit ID
               </span>
             </div>
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-              Findable
+              4-digit ID
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-2 bg-white rounded-xl p-2.5 border border-blue-100 shadow-2xs">
-            <span className="font-mono text-xs font-semibold text-slate-800 truncate" title={myUserId}>
-              {myUserId}
+          <div className="flex items-center justify-between gap-2 bg-white rounded-xl p-3 border border-blue-100 shadow-2xs">
+            <span className="font-mono text-base sm:text-lg font-bold text-blue-600 tracking-widest" title={myUserId}>
+              #{myUserId}
             </span>
             <button
               type="button"
@@ -73,7 +73,7 @@ export function SoloChatEmptyState({ myUserId, myUserName, onSelectUser }) {
             </button>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">
-            Friends can paste this ID into their search bar to chat with you directly.
+            Friends can enter this 4-digit ID into their search bar to chat with you directly.
           </p>
         </div>
       )}
@@ -89,7 +89,7 @@ export function SoloChatEmptyState({ myUserId, myUserName, onSelectUser }) {
 
         {otherOnlineUsers.length === 0 ? (
           <div className="p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 text-center text-xs text-slate-400">
-            No other members currently online. Enter a friend's Unique ID in the search bar on the left to start chatting!
+            No other members currently online. Enter a friend's 4-digit ID or email in the search bar on the left to start chatting!
           </div>
         ) : (
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto">
@@ -110,7 +110,7 @@ export function SoloChatEmptyState({ myUserId, myUserName, onSelectUser }) {
                       {u.userName}
                     </p>
                     <p className="text-[10px] text-slate-400 font-mono truncate">
-                      ID: {formatShortId(u.userId)}
+                      ID: #{u.userId}
                     </p>
                   </div>
                 </div>

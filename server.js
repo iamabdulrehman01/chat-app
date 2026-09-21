@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import net from "node:net";
 import next from "next";
 import { Server as SocketIOServer } from "socket.io";
+import { generate4DigitIdFromEmail, getUserUniqueId } from "./src/lib/utils.js";
 
 function isPortAvailable(port) {
   return new Promise((resolve) => {
@@ -84,9 +85,19 @@ async function start() {
 
     // Register user identity for Solo Chat
     socket.on("register-user", (userData) => {
-      if (!userData || !userData.userId) return;
+      if (!userData) return;
 
-      const { userId, userName, userEmail, userPicture } = userData;
+      let userId = userData.userId;
+      if (userData.userEmail) {
+        const computedId = generate4DigitIdFromEmail(userData.userEmail);
+        if (computedId) userId = computedId;
+      } else if (!userId || !/^\d{4}$/.test(String(userId))) {
+        userId = getUserUniqueId(userData);
+      }
+
+      if (!userId) return;
+
+      const { userName, userEmail, userPicture } = userData;
       socket.join(`user:${userId}`);
       socketToUser.set(socket.id, userId);
 
@@ -113,6 +124,9 @@ async function start() {
       console.log(
         `[Solo] User registered: ${user.userName} (${userId}) on socket ${socket.id}`,
       );
+
+      // Confirm verified 4-digit ID back to registering socket
+      socket.emit("registered-user-confirmed", { userId });
 
       // Send online users to all clients
       io.emit("online-users", getOnlineUsersList());
