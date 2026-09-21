@@ -3,7 +3,7 @@
 import React from "react";
 import { Search, X, MessageSquare, Users, PlusCircle, Trash2, CheckCheck } from "lucide-react";
 import { useSoloChatStore } from "@/store/useSoloChatStore";
-import { formatRelativeTime, formatShortId, getAvatarInitial } from "@/lib/utils";
+import { formatRelativeTime, formatShortId, getAvatarInitial, generate4DigitIdFromEmail } from "@/lib/utils";
 
 export function SoloChatSidebar({ myUserId, onSelectUser }) {
   const {
@@ -28,12 +28,17 @@ export function SoloChatSidebar({ myUserId, onSelectUser }) {
 
   // Filter based on search query
   const trimmedQuery = searchQuery.trim().toLowerCase();
+  // If the user typed an email, compute its associated 4-digit ID
+  const emailDerivedId = trimmedQuery.includes("@")
+    ? generate4DigitIdFromEmail(trimmedQuery)
+    : null;
 
   const filteredConversations = conversationList.filter((c) => {
     if (!trimmedQuery) return true;
     return (
       (c.partnerName && c.partnerName.toLowerCase().includes(trimmedQuery)) ||
       (c.partnerId && c.partnerId.toLowerCase().includes(trimmedQuery)) ||
+      (emailDerivedId && c.partnerId === emailDerivedId) ||
       (c.partnerEmail && c.partnerEmail.toLowerCase().includes(trimmedQuery))
     );
   });
@@ -43,23 +48,25 @@ export function SoloChatSidebar({ myUserId, onSelectUser }) {
     return (
       (u.userName && u.userName.toLowerCase().includes(trimmedQuery)) ||
       (u.userId && u.userId.toLowerCase().includes(trimmedQuery)) ||
+      (emailDerivedId && u.userId === emailDerivedId) ||
       (u.userEmail && u.userEmail.toLowerCase().includes(trimmedQuery))
     );
   });
 
+  const targetId = emailDerivedId || trimmedQuery;
   const isQueryNewId =
-    trimmedQuery &&
-    trimmedQuery !== myUserId?.toLowerCase() &&
-    !conversationList.some((c) => c.partnerId.toLowerCase() === trimmedQuery) &&
-    !onlineOtherUsers.some((u) => u.userId.toLowerCase() === trimmedQuery);
+    targetId &&
+    targetId !== myUserId?.toLowerCase() &&
+    !conversationList.some((c) => c.partnerId.toLowerCase() === targetId) &&
+    !onlineOtherUsers.some((u) => u.userId.toLowerCase() === targetId);
 
   const handleStartCustomId = () => {
-    if (!searchQuery.trim()) return;
-    const targetId = searchQuery.trim();
+    if (!targetId) return;
+    const is4Digit = /^\d{4}$/.test(targetId);
     startConversationWithUser({
       userId: targetId,
-      userName: `User (${formatShortId(targetId)})`,
-      userEmail: "",
+      userName: is4Digit ? `User #${targetId}` : `User (${formatShortId(targetId)})`,
+      userEmail: trimmedQuery.includes("@") ? trimmedQuery : "",
     });
   };
 
@@ -86,7 +93,7 @@ export function SoloChatSidebar({ myUserId, onSelectUser }) {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Find by Unique ID, name, email..."
+            placeholder="Find by 4-digit ID, name, or email..."
             className="w-full pl-9 pr-8 py-2 text-xs sm:text-[13px] rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 outline-none transition-all placeholder:text-slate-400"
           />
           {searchQuery && (
@@ -110,9 +117,11 @@ export function SoloChatSidebar({ myUserId, onSelectUser }) {
             <div className="flex items-center gap-2 min-w-0">
               <PlusCircle className="w-4 h-4 shrink-0 text-blue-600" />
               <div className="min-w-0">
-                <p className="text-[11px] font-bold">Start chat with ID</p>
+                <p className="text-[11px] font-bold">
+                  {emailDerivedId ? "Start chat with Gmail User" : "Start chat with ID"}
+                </p>
                 <p className="text-[10px] font-mono text-blue-600/80 truncate">
-                  {searchQuery.trim()}
+                  {emailDerivedId ? `${trimmedQuery} (#${emailDerivedId})` : `#${targetId}`}
                 </p>
               </div>
             </div>
@@ -284,7 +293,7 @@ export function SoloChatSidebar({ myUserId, onSelectUser }) {
                         {user.userName}
                       </p>
                       <p className="text-[10px] text-slate-400 font-mono truncate">
-                        ID: {formatShortId(user.userId)}
+                        ID: #{user.userId}
                       </p>
                     </div>
                   </div>
